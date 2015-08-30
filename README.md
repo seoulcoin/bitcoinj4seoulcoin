@@ -3,6 +3,8 @@ Coverage status: [![Coverage Status](https://coveralls.io/repos/bitcoinj/bitcoin
 
 ### Welcome to bitcoinj
 
+This is seoulcoin library forked from bitcoinj v0.13.1. many configurations were changed for seoulcoin features. and more will  be changed for additional requirements.
+
 The bitcoinj library is a Java implementation of the Bitcoin protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of Bitcoin Core. It comes with full documentation and some example apps showing how to use it.
 
 ### Technologies

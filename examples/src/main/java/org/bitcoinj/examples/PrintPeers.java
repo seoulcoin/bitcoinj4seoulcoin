@@ -16,11 +16,7 @@
 
 package org.bitcoinj.examples;
 
-import org.bitcoinj.core.AbstractPeerEventListener;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Peer;
-import org.bitcoinj.core.PeerAddress;
-import org.bitcoinj.core.VersionMessage;
+import org.bitcoinj.core.*;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscoveryException;
 import org.bitcoinj.net.NioClientManager;
@@ -79,6 +75,9 @@ public class PrintPeers {
 
         List<ListenableFuture<Void>> futures = Lists.newArrayList();
         NioClientManager clientManager = new NioClientManager();
+
+        Context ctx = new Context(params);
+        Context.propagate(ctx);
         for (final InetAddress addr : addrs) {
             InetSocketAddress address = new InetSocketAddress(addr, params.getPort());
             final Peer peer = new Peer(params, new VersionMessage(params, 0), null, new PeerAddress(address));
@@ -114,6 +113,7 @@ public class PrintPeers {
                     future.set(null);
                 }
             });
+            //clientManager.
             clientManager.openConnection(address, peer);
             futures.add(future);
         }

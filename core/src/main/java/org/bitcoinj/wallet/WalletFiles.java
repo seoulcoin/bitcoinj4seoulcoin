@@ -112,6 +112,7 @@ public class WalletFiles {
         final Listener listener = vListener;
         if (listener != null)
             listener.onBeforeAutoSave(temp);
+
         wallet.saveToFile(temp, file);
         if (listener != null)
             listener.onAfterAutoSave(file);

@@ -122,7 +122,7 @@ public class PeerGroup implements TransactionBroadcaster {
     // until we reach this count.
     @GuardedBy("lock") private int maxConnections;
     // Minimum protocol version we will allow ourselves to connect to: require Bloom filtering.
-    private volatile int vMinRequiredProtocolVersion = FilteredBlock.MIN_PROTOCOL_VERSION;
+    private volatile int vMinRequiredProtocolVersion = CoinDefinition.MIN_PROTOCOL_VERSION;//FilteredBlock.MIN_PROTOCOL_VERSION;
 
     /** How many milliseconds to wait after receiving a pong before sending another ping. */
     public static final long DEFAULT_PING_INTERVAL_MSEC = 2000;
@@ -1274,6 +1274,7 @@ public class PeerGroup implements TransactionBroadcaster {
                 startBlockChainDownloadFromPeer(peers.iterator().next()); // Will add the new download listener
             }
         } finally {
+            log.info("[CHOI_DEBUG]:startBlockChainDownload unlock");
             lock.unlock();
         }
     }
@@ -1322,6 +1323,7 @@ public class PeerGroup implements TransactionBroadcaster {
                     startBlockChainDownloadFromPeer(downloadPeer);
                 }
             }
+            log.info("[CHOI_DEBUG]handleNewPeer startBlockChainDownloadFromPeer");
             // Make sure the peer knows how to upload transactions that are requested from us.
             peer.addEventListener(peerListener, Threading.SAME_THREAD);
             // And set up event listeners for clients. This will allow them to find out about new transactions and blocks.
@@ -1330,6 +1332,7 @@ public class PeerGroup implements TransactionBroadcaster {
             }
         } finally {
             lock.unlock();
+            log.info("[CHOI_DEBUG]handleNewPeer startBlockChainDownloadFromPeer unlock");
         }
 
         final int fNewSize = newSize;
@@ -1464,6 +1467,7 @@ public class PeerGroup implements TransactionBroadcaster {
                     }
                 }
             }
+            log.info("[CHOI_DEBUG]handlePeerDeath startBlockChainDownloadFromPeer");
             numPeers = peers.size() + pendingPeers.size();
             numConnectedPeers = peers.size();
 
@@ -1485,6 +1489,8 @@ public class PeerGroup implements TransactionBroadcaster {
             }
         } finally {
             lock.unlock();
+            log.info("[CHOI_DEBUG]handlePeerDeath startBlockChainDownloadFromPeer  unlock");
+
         }
 
         peer.removeEventListener(peerListener);
@@ -1660,6 +1666,7 @@ public class PeerGroup implements TransactionBroadcaster {
             // startBlockChainDownload will setDownloadData(true) on itself automatically.
             peer.startBlockChainDownload();
         } finally {
+            log.info("[CHOI_DEBUG]:startBlockChainDownloadFromPeer unlock");
             lock.unlock();
         }
     }
@@ -1777,6 +1784,7 @@ public class PeerGroup implements TransactionBroadcaster {
     public int getMinBroadcastConnections() {
         lock.lock();
         try {
+            log.info("CHOI_DEBUG:getMinBroadcastConnections="+minBroadcastConnections);
             if (minBroadcastConnections == 0) {
                 int max = getMaxConnections();
                 if (max <= 1)
@@ -1796,6 +1804,7 @@ public class PeerGroup implements TransactionBroadcaster {
     public void setMinBroadcastConnections(int value) {
         lock.lock();
         try {
+            log.info("CHOI_DEBUG:setMinBroadcastConnections="+value);
             minBroadcastConnections = value;
         } finally {
             lock.unlock();
@@ -1836,12 +1845,14 @@ public class PeerGroup implements TransactionBroadcaster {
             tx.getConfidence().setSource(TransactionConfidence.Source.SELF);
         }
         final TransactionBroadcast broadcast = new TransactionBroadcast(this, tx);
-        broadcast.setMinConnections(minConnections);
+        log.info("CHOI_DEBUG:minConnections="+minConnections);
+        broadcast.setMinConnections(3/*minConnections*/);
         // Send the TX to the wallet once we have a successful broadcast.
         Futures.addCallback(broadcast.future(), new FutureCallback<Transaction>() {
             @Override
             public void onSuccess(Transaction transaction) {
                 runningBroadcasts.remove(broadcast);
+                log.info("CHOI_DEBUG:onSuccess runningBroadcasts.remove broadcast=" + broadcast.toString());
                 // OK, now tell the wallet about the transaction. If the wallet created the transaction then
                 // it already knows and will ignore this. If it's a transaction we received from
                 // somebody else via a side channel and are now broadcasting, this will put it into the
@@ -1862,6 +1873,7 @@ public class PeerGroup implements TransactionBroadcaster {
             @Override
             public void onFailure(Throwable throwable) {
                 // This can happen if we get a reject message from a peer.
+                log.info("CHOI_DEBUG:onFailure");
                 runningBroadcasts.remove(broadcast);
             }
         });
@@ -1970,7 +1982,7 @@ public class PeerGroup implements TransactionBroadcaster {
         // better then we'll settle for the highest we found instead.
         int highestVersion = 0, preferredVersion = 0;
         // If/when PREFERRED_VERSION is not equal to vMinRequiredProtocolVersion, reenable the last test in PeerGroupTest.downloadPeerSelection
-        final int PREFERRED_VERSION = FilteredBlock.MIN_PROTOCOL_VERSION;
+        final int PREFERRED_VERSION = CoinDefinition.MIN_PROTOCOL_VERSION;//FilteredBlock.MIN_PROTOCOL_VERSION;
         for (Peer peer : candidates) {
             highestVersion = Math.max(peer.getPeerVersionMessage().clientVersion, highestVersion);
             preferredVersion = Math.min(highestVersion, PREFERRED_VERSION);

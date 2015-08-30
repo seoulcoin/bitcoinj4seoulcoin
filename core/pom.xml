@@ -23,6 +23,7 @@
         <groupId>org.bitcoinj</groupId>
         <artifactId>bitcoinj-parent</artifactId>
         <version>0.13.1</version>
+        <!--<version>0.13.1-FAIRPAY</version>-->
     </parent>
 
     <artifactId>bitcoinj-core</artifactId>
@@ -306,6 +307,7 @@
                 <configuration>
                     <argLine>${surefireArgLine}</argLine> <!-- This is required for code coverage to work. -->
                     <runOrder>alphabetical</runOrder>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
 

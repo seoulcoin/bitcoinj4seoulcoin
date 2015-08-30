@@ -20,11 +20,7 @@ package org.bitcoinj.params;
 import java.math.BigInteger;
 import java.util.Date;
 
-import org.bitcoinj.core.Block;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.StoredBlock;
-import org.bitcoinj.core.Utils;
-import org.bitcoinj.core.VerificationException;
+import org.bitcoinj.core.*;
 import org.bitcoinj.store.BlockStore;
 import org.bitcoinj.store.BlockStoreException;
 
@@ -42,20 +38,20 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         packetMagic = 0x0b110907;
         interval = INTERVAL;
         targetTimespan = TARGET_TIMESPAN;
-        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
-        port = 18333;
-        addressHeader = 111;
-        p2shHeader = 196;
+        maxTarget = Utils.decodeCompactBits(CoinDefinition.genesisBlockDifficultyTarget);
+        port = CoinDefinition.TestPort;//18333;
+        addressHeader = CoinDefinition.testnetAddressHeader;//111;
+        p2shHeader = CoinDefinition.testnetp2shHeader;//196;
         acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
-        dumpedPrivateKeyHeader = 239;
-        genesisBlock.setTime(1296688602L);
-        genesisBlock.setDifficultyTarget(0x1d00ffffL);
-        genesisBlock.setNonce(414098458);
-        spendableCoinbaseDepth = 100;
-        subsidyDecreaseBlockCount = 210000;
+        dumpedPrivateKeyHeader = 128 + CoinDefinition.testnetAddressHeader;//239;
+        genesisBlock.setTime(CoinDefinition.testnetGenesisBlockTime);//1296688602L);
+        genesisBlock.setDifficultyTarget(CoinDefinition.testnetGenesisBlockDifficultyTarget);//0x1d00ffffL);
+        genesisBlock.setNonce(CoinDefinition.testnetGenesisBlockNonce);//414098458);
+        spendableCoinbaseDepth = CoinDefinition.spendableCoinbaseDepth;//100;
+        subsidyDecreaseBlockCount = CoinDefinition.subsidyDecreaseBlockCount;//210000;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
-        alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
+        checkState(genesisHash.equals(CoinDefinition.testnetGenesisHash));//"000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
+        alertSigningKey = Utils.HEX.decode(CoinDefinition.TESTNET_SATOSHI_KEY);//"04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
 
         dnsSeeds = new String[] {
                 "testnet-seed.bitcoin.schildbach.de", // Andreas Schildbach

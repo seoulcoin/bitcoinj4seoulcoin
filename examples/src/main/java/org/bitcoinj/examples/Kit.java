@@ -2,6 +2,7 @@ package org.bitcoinj.examples;
 
 import org.bitcoinj.core.*;
 import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.script.Script;
 
@@ -27,7 +28,7 @@ public class Kit {
         // To test you app with a real network you can use the testnet. The testnet is an alternative bitcoin network that follows the same rules as main network. Coins are worth nothing and you can get coins for example from http://faucet.xeno-genesis.com/
         // 
         // For more information have a look at: https://bitcoinj.github.io/testing and https://bitcoin.org/en/developer-examples#testing-applications
-        NetworkParameters params = TestNet3Params.get();
+        NetworkParameters params = MainNetParams.get();//TestNet3Params.get();
 
         // Now we initialize a new WalletAppKit. The kit handles all the boilerplate for us and is the easiest way to get everything up and running.
         // Have a look at the WalletAppKit documentation and its source to understand what's happening behind the scenes: https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/kits/WalletAppKit.java
@@ -36,11 +37,14 @@ public class Kit {
         // In case you want to connect with your local bitcoind tell the kit to connect to localhost.
         // You must do that in reg test mode.
         //kit.connectToLocalHost();
-
+        //kit.setBlockingStartup(false);
         // Now we start the kit and sync the blockchain.
         // bitcoinj is working a lot with the Google Guava libraries. The WalletAppKit extends the AbstractIdleService. Have a look at the introduction to Guava services: https://code.google.com/p/guava-libraries/wiki/ServiceExplained
+        System.out.println("kit.startAsync() starts.");
         kit.startAsync();
+        System.out.println("kit.awaitRunning() starts.");
         kit.awaitRunning();
+        System.out.println("send money to: " + kit.wallet().freshReceiveAddress().toString());
 
         // To observe wallet events (like coins received) we implement a EventListener class that extends the AbstractWalletEventListener bitcoinj then calls the different functions from the EventListener class
         WalletListener wListener = new WalletListener();
@@ -61,20 +65,20 @@ public class Kit {
 
         @Override
         public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-            System.out.println("-----> coins resceived: " + tx.getHashAsString());
-            System.out.println("received: " + tx.getValue(wallet));
+            System.out.println("WalletListener:-----> coins resceived: " + tx.getHashAsString());
+            System.out.println("WalletListener:received: " + tx.getValue(wallet));
         }
 
         @Override
         public void onTransactionConfidenceChanged(Wallet wallet, Transaction tx) {
-            System.out.println("-----> confidence changed: " + tx.getHashAsString());
+            System.out.println("WalletListener:-----> confidence changed: " + tx.getHashAsString());
             TransactionConfidence confidence = tx.getConfidence();
-            System.out.println("new block depth: " + confidence.getDepthInBlocks());
+            System.out.println("WalletListener:new block depth: " + confidence.getDepthInBlocks());
         }
 
         @Override
         public void onCoinsSent(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-            System.out.println("coins sent");
+            System.out.println("WalletListener:coins sent");
         }
 
         @Override
@@ -87,12 +91,12 @@ public class Kit {
 
         @Override
         public void onKeysAdded(List<ECKey> keys) {
-            System.out.println("new key added");
+            System.out.println("WalletListener:new key added");
         }
 
         @Override
         public void onScriptsChanged(Wallet wallet, List<Script> scripts, boolean isAddingScripts) {
-            System.out.println("new script added");
+            System.out.println("WalletListener:new script added");
         }
     }
 

@@ -32,43 +32,35 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         super();
         interval = INTERVAL;
         targetTimespan = TARGET_TIMESPAN;
-        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
-        dumpedPrivateKeyHeader = 128;
-        addressHeader = 0;
-        p2shHeader = 5;
+        maxTarget = Utils.decodeCompactBits(CoinDefinition.genesisBlockDifficultyTarget);//0x1d00ffffL);
+        dumpedPrivateKeyHeader = 128 + CoinDefinition.AddressHeader;
+        addressHeader = CoinDefinition.AddressHeader;//0;
+        p2shHeader = CoinDefinition.p2shHeader;//5;
         acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
-        port = 8333;
-        packetMagic = 0xf9beb4d9L;
+        port = CoinDefinition.Port;
+        packetMagic = CoinDefinition.PacketMagic;//0xf9beb4d9L;
         bip32HeaderPub = 0x0488B21E; //The 4 byte header that serializes in base58 to "xpub".
         bip32HeaderPriv = 0x0488ADE4; //The 4 byte header that serializes in base58 to "xprv"
 
-        genesisBlock.setDifficultyTarget(0x1d00ffffL);
-        genesisBlock.setTime(1231006505L);
-        genesisBlock.setNonce(2083236893);
+        genesisBlock.setDifficultyTarget(CoinDefinition.genesisBlockDifficultyTarget);//0x1d00ffffL);
+        genesisBlock.setTime(CoinDefinition.genesisBlockTime);
+        genesisBlock.setNonce(CoinDefinition.genesisBlockNonce);
         id = ID_MAINNET;
-        subsidyDecreaseBlockCount = 210000;
-        spendableCoinbaseDepth = 100;
+        subsidyDecreaseBlockCount = CoinDefinition.subsidyDecreaseBlockCount;//210000;
+        spendableCoinbaseDepth = CoinDefinition.spendableCoinbaseDepth;//100;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"),
+        checkState(genesisHash.equals(CoinDefinition.genesisHash),//"000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"),
                 genesisHash);
 
         // This contains (at a minimum) the blocks which are not BIP30 compliant. BIP30 changed how duplicate
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(91722, Sha256Hash.wrap("00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e"));
-        checkpoints.put(91812, Sha256Hash.wrap("00000000000af0aed4792b1acee3d966af36cf5def14935db8de83d6f9306f2f"));
-        checkpoints.put(91842, Sha256Hash.wrap("00000000000a4d0a398161ffc163c503763b1f4360639393e0e4c8e300e0caec"));
-        checkpoints.put(91880, Sha256Hash.wrap("00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721"));
-        checkpoints.put(200000, Sha256Hash.wrap("000000000000034a7dedef4a161fa058a2d67a173a90155f3a2fe6fc132e0ebf"));
+        CoinDefinition.initCheckpoints(checkpoints);
 
-        dnsSeeds = new String[] {
-                "seed.bitcoin.sipa.be",        // Pieter Wuille
-                "dnsseed.bluematt.me",         // Matt Corallo
-                "dnsseed.bitcoin.dashjr.org",  // Luke Dashjr
-                "seed.bitcoinstats.com",       // Chris Decker
-                "seed.bitnodes.io",            // Addy Yeow
-        };
+        dnsSeeds = CoinDefinition.dnsSeeds;
+        /*
+        todo: CHOI_DEBUG
         httpSeeds = new HttpDiscovery.Details[] {
                 new HttpDiscovery.Details(
                         ECKey.fromPublicOnly(BaseEncoding.base16().decode(
@@ -78,7 +70,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
                         URI.create("http://main.seed.vinumeris.com/peers")
                 )
         };
-
+        */
         addrSeeds = new int[] {
                 0x1ddb1032, 0x6242ce40, 0x52d6a445, 0x2dd7a445, 0x8a53cd47, 0x73263750, 0xda23c257, 0xecd4ed57,
                 0x0a40ec59, 0x75dce160, 0x7df76791, 0x89370bad, 0xa4f214ad, 0x767700ae, 0x638b0418, 0x868a1018,

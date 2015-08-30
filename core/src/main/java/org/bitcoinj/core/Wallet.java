@@ -456,6 +456,8 @@ public class Wallet extends BaseTaggableObject implements Serializable, BlockCha
             keychainLock.unlock();
         }
         saveNow();
+        //TODO: need  remove
+        log.info("[CHOI_DEBUG]:freshAddress="+key.toString());
         return key;
     }
 
@@ -464,6 +466,8 @@ public class Wallet extends BaseTaggableObject implements Serializable, BlockCha
      * {@link org.bitcoinj.wallet.KeyChain.KeyPurpose#RECEIVE_FUNDS} as the parameter.
      */
     public Address freshReceiveAddress() {
+        Address address =  freshAddress(KeyChain.KeyPurpose.RECEIVE_FUNDS);
+
         return freshAddress(KeyChain.KeyPurpose.RECEIVE_FUNDS);
     }
 
@@ -3455,8 +3459,11 @@ public class Wallet extends BaseTaggableObject implements Serializable, BlockCha
     public Transaction sendCoinsOffline(SendRequest request) throws InsufficientMoneyException {
         lock.lock();
         try {
+            log.info("CHOI_DEBUG:sendCoinsOffline request"+request.toString());
             completeTx(request);
+            log.info("CHOI_DEBUG:sendCoinsOffline completeTx request" + request.toString());
             commitTx(request.tx);
+            log.info("CHOI_DEBUG:sendCoinsOffline commitTx request" + request.toString());
             return request.tx;
         } finally {
             lock.unlock();

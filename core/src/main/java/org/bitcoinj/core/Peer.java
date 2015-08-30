@@ -510,6 +510,7 @@ public class Peer extends PeerSocketHandler {
     }
 
     private void processHeaders(HeadersMessage m) throws ProtocolException {
+        log.info("[CHOI_DEBUG]downloadDone:processHeaders["+m+"]");
         // Runs in network loop thread for this peer.
         //
         // This method can run if a peer just randomly sends us a "headers" message (should never happen), or more
@@ -821,6 +822,8 @@ public class Peer extends PeerSocketHandler {
     }
 
     private void processBlock(Block m) {
+        log.info("[CHOI_DEBUG]downloadDone:processBlock[{}]", m.getHashAsString());
+
         if (log.isDebugEnabled()) {
             log.debug("{}: Received broadcast block {}", getAddress(), m.getHashAsString());
         }
@@ -1350,12 +1353,14 @@ public class Peer extends PeerSocketHandler {
                     }
                 });
             }
+            log.info("[CHOI_DEBUG]after registration.executor.execute");
             // When we just want as many blocks as possible, we can set the target hash to zero.
             lock.lock();
             try {
                 blockChainDownloadLocked(Sha256Hash.ZERO_HASH);
             } finally {
                 lock.unlock();
+                log.info("[CHOI_DEBUG]startBlockChainDownload unlock");
             }
         }
     }

@@ -28,7 +28,7 @@ public class SendRequest {
         // How much coins do we want to send?
         // The Coin class represents a monetary Bitcoin value.
         // We use the parseCoin function to simply get a Coin instance from a simple String.
-        Coin value = Coin.parseCoin("0.09");
+        Coin value = Coin.parseCoin("9");
 
         // To which address you want to send the coins?
         // The Address class represents a Bitcoin address.

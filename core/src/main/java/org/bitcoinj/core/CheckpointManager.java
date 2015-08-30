@@ -177,6 +177,9 @@ public class CheckpointManager {
      */
     public StoredBlock getCheckpointBefore(long time) {
         try {
+            //todo: CHOI_DEBUG
+            checkNotNull(params.getGenesisBlock());
+            log.info("CHOI_DEBUG: getCheckpointBefore.params.getGenesisBlock()="+params.getGenesisBlock());
             checkArgument(time > params.getGenesisBlock().getTimeSeconds());
             // This is thread safe because the map never changes after creation.
             Map.Entry<Long, StoredBlock> entry = checkpoints.floorEntry(time);
@@ -207,11 +210,15 @@ public class CheckpointManager {
      */
     public static void checkpoint(NetworkParameters params, InputStream checkpoints, BlockStore store, long time)
             throws IOException, BlockStoreException {
+        if(!CoinDefinition.checkpointFileSupport)
+            return;
         checkNotNull(params);
         checkNotNull(store);
         checkArgument(!(store instanceof FullPrunedBlockStore), "You cannot use checkpointing with a full store.");
 
-        time -= 86400 * 7;
+        //todo: CHOI_DEBUG
+        // time -= 86400 * 7;
+        time -= 86400 * 1;
 
         checkArgument(time > 0);
         log.info("Attempting to initialize a new block store with a checkpoint for time {}", time);

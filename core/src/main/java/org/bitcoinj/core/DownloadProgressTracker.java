@@ -56,6 +56,7 @@ public class DownloadProgressTracker extends AbstractPeerEventListener {
 
     @Override
     public void onBlocksDownloaded(Peer peer, Block block, @Nullable FilteredBlock filteredBlock, int blocksLeft) {
+        log.info("[CHOI_DEBUG]onBlocksDownloaded caughtUp[{}] blocksLeft[{}]",  caughtUp, blocksLeft);
         if (caughtUp)
             return;
 
@@ -100,6 +101,7 @@ public class DownloadProgressTracker extends AbstractPeerEventListener {
      * Called when we are done downloading the block chain.
      */
     protected void doneDownload() {
+        log.info("[CHOI_DEBUG]doneDownload");
     }
 
     /**

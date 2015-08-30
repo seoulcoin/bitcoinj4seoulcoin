@@ -123,7 +123,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
             }
-        }, new InetSocketAddress("localhost", 4243));
+        }, new InetSocketAddress("localhost", 44243));
         server.startAsync();
         server.awaitRunning();
 
@@ -144,7 +144,7 @@ public class NetworkAbstractionTests {
                         client1Disconnected.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        openConnection(new InetSocketAddress("localhost", 4243), clientHandler);
+        openConnection(new InetSocketAddress("localhost", 44243), clientHandler);
 
         client1ConnectionOpened.get();
         client1Disconnected.get();
@@ -168,7 +168,7 @@ public class NetworkAbstractionTests {
                         client2Disconnected.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 4243), clientHandler);
+        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 44243), clientHandler);
 
         serverConnectionOpen.get();
         client2ConnectionOpened.get();
@@ -216,7 +216,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
             }
-        }, new InetSocketAddress("localhost", 4243));
+        }, new InetSocketAddress("localhost", 44243));
         server.startAsync();
         server.awaitRunning();
 
@@ -241,7 +241,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
 
-        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 4243), clientHandler);
+        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 44243), clientHandler);
 
         clientConnectionOpen.get();
         serverConnectionOpen.get();
@@ -300,11 +300,11 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 10);
             }
-        }, new InetSocketAddress("localhost", 4243));
+        }, new InetSocketAddress("localhost", 44243));
         server.startAsync();
         server.awaitRunning();
 
-        openConnection(new InetSocketAddress("localhost", 4243), new ProtobufParser<Protos.TwoWayChannelMessage>(
+        openConnection(new InetSocketAddress("localhost", 44243), new ProtobufParser<Protos.TwoWayChannelMessage>(
                 new ProtobufParser.Listener<Protos.TwoWayChannelMessage>() {
                     @Override
                     public void messageReceived(ProtobufParser<Protos.TwoWayChannelMessage> handler, Protos.TwoWayChannelMessage msg) {
@@ -346,7 +346,7 @@ public class NetworkAbstractionTests {
                         clientConnection2Closed.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        openConnection(new InetSocketAddress("localhost", 4243), client2Handler);
+        openConnection(new InetSocketAddress("localhost", 44243), client2Handler);
 
         clientConnection2Open.get();
         serverConnection2Open.get();
@@ -392,7 +392,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 0x10000, 0);
             }
-        }, new InetSocketAddress("localhost", 4243));
+        }, new InetSocketAddress("localhost", 44243));
         server.startAsync();
         server.awaitRunning();
 
@@ -425,7 +425,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 0x10000, 0);
 
-        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 4243), clientHandler);
+        MessageWriteTarget client = openConnection(new InetSocketAddress("localhost", 44243), clientHandler);
 
         clientConnectionOpen.get();
         serverConnectionOpen.get();
@@ -556,7 +556,7 @@ public class NetworkAbstractionTests {
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
             }
-        }, new InetSocketAddress("localhost", 4243));
+        }, new InetSocketAddress("localhost", 44243));
         server.startAsync();
         server.awaitRunning();
 
@@ -577,7 +577,7 @@ public class NetworkAbstractionTests {
                         client1ConnectionClosed.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        MessageWriteTarget client1 = openConnection(new InetSocketAddress("localhost", 4243), client1Handler);
+        MessageWriteTarget client1 = openConnection(new InetSocketAddress("localhost", 44243), client1Handler);
 
         client1ConnectionOpen.get();
         serverConnection1Open.get();
@@ -599,7 +599,7 @@ public class NetworkAbstractionTests {
                         client2ConnectionClosed.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        openConnection(new InetSocketAddress("localhost", 4243), client2Handler);
+        openConnection(new InetSocketAddress("localhost", 44243), client2Handler);
 
         client2ConnectionOpen.get();
         serverConnection2Open.get();
@@ -622,7 +622,7 @@ public class NetworkAbstractionTests {
                         client3ConnectionClosed.set(null);
                     }
                 }, Protos.TwoWayChannelMessage.getDefaultInstance(), 1000, 0);
-        NioClient client3 = new NioClient(new InetSocketAddress("localhost", 4243), client3Handler, 0);
+        NioClient client3 = new NioClient(new InetSocketAddress("localhost", 44243), client3Handler, 0);
 
         client3ConnectionOpen.get();
         serverConnection3Open.get();

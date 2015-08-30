@@ -74,7 +74,8 @@ public class ExponentialBackoff implements Comparable<ExponentialBackoff> {
     /** Track a success - reset back off interval to the initial value */
     public void trackSuccess() {
         backoff = params.initial;
-        retryTime = Utils.currentTimeMillis();
+        retryTime = Utils.currentTimeMillis() + (long)backoff;//CHOI_DEBUG
+        //retryTime = Utils.currentTimeMillis();
     }
 
     /** Track a failure - multiply the back off interval by the multiplier */

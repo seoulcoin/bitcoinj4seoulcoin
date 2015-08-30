@@ -36,8 +36,11 @@ public class ExchangeRate implements Serializable {
         checkArgument(coin.isPositive());
         checkArgument(fiat.isPositive());
         checkArgument(fiat.currencyCode != null, "currency code required");
-        this.coin = coin;
-        this.fiat = fiat;
+//        this.coin = coin;
+//        this.fiat = fiat;
+        //todo: fix exchange rate to 1:1
+        this.coin = Coin.COIN;
+        this.fiat = Fiat.valueOf(fiat.getCurrencyCode(), 1);
     }
 
     /** Construct exchange rate. One coin is worth this amount of fiat. */
@@ -51,8 +54,11 @@ public class ExchangeRate implements Serializable {
      */
     public Fiat coinToFiat(Coin convertCoin) {
         // Use BigInteger because it's much easier to maintain full precision without overflowing.
-        final BigInteger converted = BigInteger.valueOf(convertCoin.value).multiply(BigInteger.valueOf(fiat.value))
-                .divide(BigInteger.valueOf(coin.value));
+//        final BigInteger converted = BigInteger.valueOf(convertCoin.value).multiply(BigInteger.valueOf(fiat.value))
+//                .divide(BigInteger.valueOf(coin.value));
+        //todo: CHOI_DEBUG
+        final BigInteger converted = BigInteger.valueOf(convertCoin.value)
+                .divide(BigInteger.valueOf(Coin.COIN.value));
         if (converted.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0
                 || converted.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0)
             throw new ArithmeticException("Overflow");
@@ -67,8 +73,10 @@ public class ExchangeRate implements Serializable {
         checkArgument(convertFiat.currencyCode.equals(fiat.currencyCode), "Currency mismatch: %s vs %s",
                 convertFiat.currencyCode, fiat.currencyCode);
         // Use BigInteger because it's much easier to maintain full precision without overflowing.
-        final BigInteger converted = BigInteger.valueOf(convertFiat.value).multiply(BigInteger.valueOf(coin.value))
-                .divide(BigInteger.valueOf(fiat.value));
+//        final BigInteger converted = BigInteger.valueOf(convertFiat.value).multiply(BigInteger.valueOf(coin.value))
+//                .divide(BigInteger.valueOf(fiat.value));
+        //todo: CHOI_DEBUG
+        final BigInteger converted = BigInteger.valueOf(convertFiat.value).multiply(BigInteger.valueOf(Coin.COIN.value));
         if (converted.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0
                 || converted.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0)
             throw new ArithmeticException("Overflow");
